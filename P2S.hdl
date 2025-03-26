@@ -6,14 +6,13 @@ CHIP P2S {
     // 4-bit register to store the input data
     Register(in=indata, load=load, out=storedData);
 
-    // 2-bit counter to track the bit position
-    Counter(out=count, inc=enable, load=load, in=0);
+    // 2-bit counter to track the bit position (counts 0 to 3)
+    Counter(out=count, inc=enable, load=load, in=false);
 
-    // Multiplexer to select the correct output bit based on counter value
-    Mux4Way16(a=storedData[0], b=storedData[1], c=storedData[2], d=storedData[3], 
-              sel=count, out=sout);
+    // Multiplexer to select the correct output bit based on the counter value
+    Mux4Way4(a=storedData[0], b=storedData[1], c=storedData[2], d=storedData[3], 
+             sel=count, out=sout);
 
-    // Complete signal should be asserted when all 4 bits have been transmitted
-    Equals4(a=count, b=4, out=complete);
+    // Complete signal should be asserted when the counter reaches 3
+    Equals4(a=count, b=3, out=complete);
 }
-g
