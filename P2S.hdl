@@ -1,18 +1,10 @@
-CHIP P2S {
-    IN indata[4], enable, load;
-    OUT sout, complete;
+CHIP Register4 {
+    IN in[4], load;
+    OUT out[4];
 
     PARTS:
-    // 4-bit register to store the input data
-    Register4(in=indata, load=load, out=storedData);  // Ensure you have a 4-bit Register
-
-    // 2-bit counter to track the bit position (counts 0 to 3)
-    Counter(width=2, out=count, inc=enable, load=load, in=false);
-
-    // Multiplexer to select the correct output bit based on the counter value
-    Mux4Way(a=storedData[0], b=storedData[1], c=storedData[2], d=storedData[3], 
-            sel=count, out=sout);
-
-    // Complete signal should be asserted when the counter reaches 3
-    Equals2(a=count, b=3, out=complete);
+    BitRegister(in=in[0], load=load, out=out[0]);
+    BitRegister(in=in[1], load=load, out=out[1]);
+    BitRegister(in=in[2], load=load, out=out[2]);
+    BitRegister(in=in[3], load=load, out=out[3]);
 }
